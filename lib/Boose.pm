@@ -4,7 +4,7 @@ use 5.010;
 use strict;
 use warnings;
 
-use mro ();
+use mro     ();
 use feature ();
 use Try::Tiny;
 
@@ -17,7 +17,7 @@ sub import {
     strict->import;
     warnings->import;
     feature->import(':5.10');
-    mro::set_mro($package => 'c3' );
+    mro::set_mro($package => 'c3');
 
     install_sub($package => extends => \&extends);
     install_sub($package => has     => \&has);
@@ -45,12 +45,26 @@ sub has {
 sub install_attr {
     my $package = shift;
     my $attr    = shift;
+    my $args    = shift;
 
     install_sub(
         $package => $attr => sub {
             @_ > 1
               ? do { $_[0]->{$attr} = $_[1]; $_[0] }
-              : $_[0]->{$attr};
+              : do {
+                return $_[0]->{$attr} if exists $_[0]->{$attr};
+
+                my $default = ref $args eq 'HASH' ? $args->{default} : $args;
+                return unless defined $default;
+
+                Carp::croak('Default value must be a SCALAR or CODEREF')
+                  if ref $default && ref $default ne 'CODE';
+
+                $_[0]->{$attr} =
+                  ref $default eq 'CODE'
+                  ? $default->($_[0])
+                  : $default;
+              };
         }
     );
 }
