@@ -6,6 +6,9 @@ use warnings;
 
 use mro     ();
 use feature ();
+
+use Boose::Loader;
+
 use Try::Tiny;
 
 our $VERSION = '0.0001';
@@ -32,7 +35,7 @@ sub extends {
 
     my $package = caller;
 
-    my $e = load_class($class);
+    my $e = Boose::Loader::load($class);
     Carp::croak($e) if $e;
 
     no strict 'refs';
@@ -52,39 +55,6 @@ sub has {
     foreach my $name (@$names) {
         install_attr($package, $name, $args);
     }
-}
-
-sub is_class_loaded {
-    my $class = shift;
-
-    return 1 if $class->can('new');
-
-    return;
-}
-
-sub is_valid_class_name {
-    my $class = shift;
-
-    return 1 if $class =~ m/^[A-Za-z][A-Za-z0-9:]+$/x;
-
-    return;
-}
-
-sub load_class {
-    my $class = shift;
-
-    Carp::croak('Class name is invalid') unless is_valid_class_name($class);
-
-    return if is_class_loaded($class);
-
-    $class =~ s{::}{/};
-    $class .= '.pm';
-
-    do {
-        local $@;
-        eval { require $class };
-        return $@;
-    };
 }
 
 sub install_attr {
