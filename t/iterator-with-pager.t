@@ -6,13 +6,13 @@ use warnings;
 use Test::More tests => 21;
 
 use_ok('Boose::Iterator');
-use_ok('Boose::IteratorPaged');
+use_ok('Boose::IteratorWithPager');
 
 my $i;
 my $page;
 my $element;
 
-$i = Boose::IteratorPaged->new(Boose::Iterator->new);
+$i = Boose::IteratorWithPager->new(Boose::Iterator->new);
 is $i->size => 0;
 ok not defined $i->next(10)->next;
 ok not defined $i->next(10)->prev;
@@ -20,19 +20,19 @@ ok not defined $i->prev(10)->prev;
 ok not defined $i->prev(10)->next;
 
 $i =
-  Boose::IteratorPaged->new(
+  Boose::IteratorWithPager->new(
     Boose::Iterator->new({name => 1}, {name => 2}, {name => 3}));
 is $i->size => 3;
 
 $i->rewind;
 
 $page = $i->next(10);
-ok $page->isa('Boose::IteratorPaged');
+ok $page->isa('Boose::IteratorWithPager');
 is $page->size => 3;
 ok not defined $i->next;
 
 $page = $i->next(10);
-ok $page->isa('Boose::IteratorPaged');
+ok $page->isa('Boose::IteratorWithPager');
 is $page->size => 0;
 
 $i->rewind;

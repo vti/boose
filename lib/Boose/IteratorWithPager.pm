@@ -1,4 +1,4 @@
-package Boose::IteratorPaged;
+package Boose::IteratorWithPager;
 use Boose;
 
 use base 'Boose::Decorator';
