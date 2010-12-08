@@ -3,6 +3,8 @@
 package Foo;
 use Boose;
 
+use base 'Boose::Base';
+
 has [qw/foo bar/];
 has 'baz';
 has 'default';

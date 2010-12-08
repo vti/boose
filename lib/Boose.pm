@@ -4,6 +4,7 @@ use 5.010;
 use strict;
 use warnings;
 
+use mro ();
 use feature ();
 
 our $VERSION = '0.0001';
@@ -15,19 +16,10 @@ sub import {
     strict->import;
     warnings->import;
     feature->import(':5.10');
+    mro::set_mro($package => 'c3' );
 
-    fix_isa($package);
-
-    install_sub($package => has => \&has);
-}
-
-sub fix_isa {
-    my $package = shift;
-
-    require Boose::Base;
-
-    no strict 'refs';
-    unshift @{"$package\::ISA"}, 'Boose::Base';
+    install_sub($package => extends => \&extends);
+    install_sub($package => has     => \&has);
 }
 
 sub has {
@@ -36,7 +28,7 @@ sub has {
 
     $args ||= {};
 
-    my $package = caller();
+    my $package = caller;
 
     $names = [$names] unless ref $names eq 'ARRAY';
 
