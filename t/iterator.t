@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 15;
 
 use_ok('Boose::Iterator');
 
@@ -41,8 +41,3 @@ ok $i->current;
 is $i->current->{name} => 1;
 $i->next;
 is $i->current->{name} => 1;
-
-$i = Boose::Iterator->new([1, 2, 3]);
-my $sum = 0;
-$i->each(sub { $sum += $_[1] });
-is $sum => 6;

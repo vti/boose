@@ -82,19 +82,4 @@ sub prev {
     return $self->{elements}->[--$self->{index}];
 }
 
-sub each {
-    my $self = shift;
-    my $sub  = shift;
-
-    $self->rewind;
-
-    while (my $el = $self->next) {
-        $sub->($self, $el);
-    }
-
-    $self->rewind;
-
-    return $self;
-}
-
 1;
