@@ -6,20 +6,28 @@ use warnings;
 
 use feature ();
 
-require Carp;
-
 our $VERSION = '0.0001';
 
 sub import {
+    my $package = caller;
+
+    # From Modern::Perl
     strict->import;
     warnings->import;
     feature->import(':5.10');
 
-    my $package = caller;
-
-    install_new($package);
+    fix_isa($package);
 
     install_sub($package => has => \&has);
+}
+
+sub fix_isa {
+    my $package = shift;
+
+    require Boose::Base;
+
+    no strict 'refs';
+    unshift @{"$package\::ISA"}, 'Boose::Base';
 }
 
 sub has {
@@ -46,27 +54,6 @@ sub install_attr {
             @_ > 1
               ? do { $_[0]->{$attr} = $_[1]; $_[0] }
               : $_[0]->{$attr};
-        }
-    );
-}
-
-sub install_new {
-    my $package = shift;
-
-    install_sub(
-        $package => new => sub {
-            my $class = shift;
-            $class = ref $class if ref $class;
-
-            my $self = {@_};
-
-            bless $self, $class;
-
-            foreach my $key (keys %$self) {
-                Carp::croak("Unknown attribute $key") unless $self->can($key);
-            }
-
-            return $self;
         }
     );
 }
