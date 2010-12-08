@@ -6,6 +6,7 @@ use warnings;
 
 use mro ();
 use feature ();
+use Try::Tiny;
 
 our $VERSION = '0.0001';
 
@@ -20,6 +21,10 @@ sub import {
 
     install_sub($package => extends => \&extends);
     install_sub($package => has     => \&has);
+
+    install_sub($package => try     => \&try);
+    install_sub($package => catch   => \&catch);
+    install_sub($package => finally => \&finally);
 }
 
 sub has {
