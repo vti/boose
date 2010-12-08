@@ -3,7 +3,7 @@
 package Foo;
 use Boose;
 
-use base 'Boose::Base';
+extends 'Boose::Base';
 
 has 'foo';
 

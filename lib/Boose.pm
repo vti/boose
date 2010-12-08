@@ -27,6 +27,18 @@ sub import {
     install_sub($package => finally => \&finally);
 }
 
+sub extends {
+    my $class = shift;
+
+    my $package = caller;
+
+    my $e = load_class($class);
+    Carp::croak($e) if $e;
+
+    no strict 'refs';
+    push @{"$package\::ISA"}, $class;
+}
+
 sub has {
     my $names = shift;
     my $args  = shift;
@@ -40,6 +52,39 @@ sub has {
     foreach my $name (@$names) {
         install_attr($package, $name, $args);
     }
+}
+
+sub is_class_loaded {
+    my $class = shift;
+
+    return 1 if $class->can('new');
+
+    return;
+}
+
+sub is_valid_class_name {
+    my $class = shift;
+
+    return 1 if $class =~ m/^[A-Za-z][A-Za-z0-9:]+$/x;
+
+    return;
+}
+
+sub load_class {
+    my $class = shift;
+
+    Carp::croak('Class name is invalid') unless is_valid_class_name($class);
+
+    return if is_class_loaded($class);
+
+    $class =~ s{::}{/};
+    $class .= '.pm';
+
+    do {
+        local $@;
+        eval { require $class };
+        return $@;
+    };
 }
 
 sub install_attr {

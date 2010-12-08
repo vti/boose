@@ -1,7 +1,7 @@
 package Boose::IteratorWithLambdas;
 use Boose;
 
-use base 'Boose::Decorator';
+extends 'Boose::Decorator';
 
 sub first {
     my $self = shift;

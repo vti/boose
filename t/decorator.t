@@ -5,7 +5,7 @@
     package Foo;
     use Boose;
 
-    use base 'Boose::Base';
+    extends 'Boose::Base';
 
     sub foo {'Hello'}
 }
@@ -15,7 +15,7 @@
     package Bar;
     use Boose;
 
-    use base 'Boose::Decorator';
+    extends 'Boose::Decorator';
 
     sub foo { shift->decorated->foo . ' there' }
 }

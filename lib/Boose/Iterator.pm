@@ -1,7 +1,7 @@
 package Boose::Iterator;
 use Boose;
 
-use base 'Boose::Base';
+extends 'Boose::Base';
 
 sub new {
     my $self = shift->SUPER::new;

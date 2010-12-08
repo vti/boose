@@ -3,7 +3,7 @@
 package Foo;
 use Boose;
 
-use base 'Boose::Base';
+extends 'Boose::Base';
 
 has [qw/foo bar/];
 has 'baz';
@@ -23,7 +23,7 @@ sub wrong {1}
 package Bar;
 use Boose;
 
-use base 'Foo';
+extends 'Foo';
 
 has 'foofoo';
 
