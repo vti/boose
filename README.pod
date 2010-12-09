@@ -1,0 +1,114 @@
+=head1 Boose
+
+Boose is a lightweight Moose-like OO system for Perl5.
+
+=head1 Features
+
+=over 4
+
+=item Moose-like DSL (but not required)
+
+    package Car;
+    use Boose;
+
+    extends 'Vehicle';
+
+    with 'BreakableRole';
+
+    has 'number';
+
+=item Constructor
+
+    package Car;
+    use Boose;
+
+    extends 'Vehicle';
+
+    has 'number';
+
+    ...
+
+    Car->new(number => 12345);
+
+=item Chained accessors
+
+    package Car;
+    use Boose;
+
+    has number => {default => 12345};
+
+    has size => {default => 'big'};
+
+    ...
+
+    my $car = Car->new;
+    $car->number(54321)->size('small');
+
+=item Roles
+
+    package BreakableRole;
+    use Boose::Role;
+
+    extends 'Boose::Role::Base';
+
+    sub break {}
+
+    package Car;
+    use Boose;
+
+    with 'BreakableRole';
+
+=item Exception classes and try/catch/finally syntax (provided by L<Try::Tiny>
+
+    package Car::Exception;
+    use Boose;
+
+    extends 'Boose::Exception';
+
+    has message => 'Car is broken';
+
+    package Car;
+    use Boose;
+
+    extends 'Boose::Base';
+
+    sub break {
+        try {
+            die 42;
+        }
+        catch {
+            throw 'Car::Exception';
+        };
+    }
+
+=item Included implemented patterns
+
+    * Iterator
+    * Decorator
+
+=item Forced requirement of Perl >= 5.10
+
+    * imports strict and warnings
+    * 5.10 features
+
+=item Moose-like syntax is not required
+
+    package Car;
+
+    use base 'Boose::Base';
+
+    __PACKAGE__->attr(number => {default => 12345});
+
+    __PACKAGE__->add_role('Breakable');
+
+    sub break {
+        my $self = shift;
+
+        $self->throw('Error!');
+    }
+
+=item Lightweight
+
+Only really useful, tiny and one-thing-only modules are used.
+
+=back
