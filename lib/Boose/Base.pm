@@ -31,7 +31,7 @@ sub attr {
     my $names   = shift;
     my $args    = shift;
 
-    Carp::croak('->attrs must be called on class, not on object')
+    Carp::croak('->attr must be called on class, not object')
       if ref $package;
 
     $names = [$names] unless ref $names eq 'ARRAY';
