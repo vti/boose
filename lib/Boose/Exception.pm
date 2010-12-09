@@ -1,7 +1,7 @@
 package Boose::Exception;
 
 use Boose::Loader;
-use Boose::Util 'class_to_path';
+use Boose::Util;
 
 use Try::Tiny;
 use Scalar::Util 'blessed';
@@ -27,7 +27,10 @@ sub throw {
     # the exception could be thrown from it too
     my $new;
     try {
-        require $path;
+        if (!is_class_loaded($class)) {
+            require $path;
+        }
+
         $new = $class->new(@args);
     }
     catch {

@@ -7,14 +7,6 @@ use Boose::Exception;
 use Boose::Util;
 use Try::Tiny;
 
-sub is_class_loaded {
-    my $class = shift;
-
-    return 1 if $class->can('new');
-
-    return;
-}
-
 sub is_valid_class_name {
     my $class = shift;
 

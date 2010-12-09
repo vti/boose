@@ -7,7 +7,15 @@ BEGIN {
     @ISA = qw(Exporter);
 }
 
-@EXPORT = @EXPORT_OK = qw(class_to_path);
+@EXPORT = @EXPORT_OK = qw(is_class_loaded class_to_path);
+
+sub is_class_loaded {
+    my $class = shift;
+
+    return 1 if $class->can('new');
+
+    return;
+}
 
 sub class_to_path {
     my $class = shift;

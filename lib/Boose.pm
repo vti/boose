@@ -7,8 +7,9 @@ use warnings;
 use mro     ();
 use feature ();
 
-use Boose::Loader;
 use Boose::Base;
+use Boose::Exception;
+use Boose::Loader;
 
 use Try::Tiny;
 
@@ -43,11 +44,8 @@ sub extends {
     push @{"$package\::ISA"}, $class;
 }
 
-sub has { Boose::Base->attr(@_) }
-
-sub throw {
-    my $class = shift;
-}
+sub has   { Boose::Base->attr(@_) }
+sub throw { Boose::Exception->throw(@_) }
 
 sub _install_sub {
     my $package = shift;

@@ -35,9 +35,18 @@ sub new {
     return $self;
 }
 
+sub mortal {
+    throw 'Bar::Exception', message => 'Error!';
+}
+
+package Bar::Exception;
+use base 'Boose::Exception::Base';
+
 package main;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
+
+use Try::Tiny;
 
 my $foo = Foo->new;
 ok $foo->isa('Boose::Base');
@@ -78,8 +87,15 @@ is $foo->wrong => 1;
 
 my $bar = Bar->new(foo => 1, foofoo => 2);
 ok $bar->isa('Foo');
-is $bar->foo => 1;
+is $bar->foo    => 1;
 is $bar->foofoo => 2;
 
 $bar = Bar->new;
 is $bar->foofoo => 3;
+
+try {
+    $bar->mortal;
+}
+catch {
+    is $_ => 'Error!';
+};
