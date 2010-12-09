@@ -2,11 +2,7 @@
 
 Boose is a lightweight Moose-like OO system for Perl5.
 
-=head1 Features
-
-=over 4
-
-=item Moose-like DSL (but not required)
+=head2 Moose-like DSL (but not required)
 
     package Car;
     use Boose;
@@ -17,7 +13,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
 
     has 'number';
 
-=item Constructor
+=head2 Constructor
 
     package Car;
     use Boose;
@@ -30,7 +26,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
 
     Car->new(number => 12345);
 
-=item Chained accessors
+=head2 Chained accessors
 
     package Car;
     use Boose;
@@ -44,7 +40,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
     my $car = Car->new;
     $car->number(54321)->size('small');
 
-=item Roles
+=head2 Roles
 
     package BreakableRole;
     use Boose::Role;
@@ -58,7 +54,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
 
     with 'BreakableRole';
 
-=item Exception classes and try/catch/finally syntax (provided by L<Try::Tiny>
+=head2 Exception classes and try/catch/finally syntax (provided by L<Try::Tiny>)
 
     package Car::Exception;
     use Boose;
@@ -81,17 +77,27 @@ Boose is a lightweight Moose-like OO system for Perl5.
         };
     }
 
-=item Included implemented patterns
+=head2 Included implemented patterns
 
-    * Iterator
-    * Decorator
+=over 4
 
-=item Forced requirement of Perl >= 5.10
+=item Iterator
 
-    * imports strict and warnings
-    * 5.10 features
+=item Decorator
 
-=item Moose-like syntax is not required
+=back
+
+=head2 Forced requirement of Perl >= 5.10
+
+=over 4
+
+=item Switches on strict and warnings
+
+=item Provides 5.10 features
+
+=back
+
+=head2 Moose-like syntax is not required
 
     package Car;
 
@@ -107,8 +113,8 @@ Boose is a lightweight Moose-like OO system for Perl5.
         $self->throw('Error!');
     }
 
-=item Lightweight
+=head2 Lightweight
 
 Only really useful, tiny and one-thing-only modules are used.
 
-=back
+=cut
