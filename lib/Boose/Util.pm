@@ -7,7 +7,7 @@ BEGIN {
     @ISA = qw(Exporter);
 }
 
-@EXPORT = @EXPORT_OK = qw(is_class_loaded class_to_path);
+@EXPORT = @EXPORT_OK = qw(is_class_loaded class_to_path install_sub);
 
 sub is_class_loaded {
     my $class = shift;
@@ -24,6 +24,17 @@ sub class_to_path {
     $class .= '.pm';
 
     return $class;
+}
+
+sub install_sub {
+    my $package = shift;
+    my $name    = shift;
+    my $sub     = shift;
+
+    return if $package->can($name);
+
+    no strict 'refs';
+    *{$package . '::' . $name} = $sub;
 }
 
 1;

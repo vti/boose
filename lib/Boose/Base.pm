@@ -5,6 +5,8 @@ use warnings;
 
 require Carp;
 
+use Boose::Loader;
+
 sub new {
     my $class = shift;
     $class = ref $class if ref $class;
@@ -43,6 +45,16 @@ sub attr {
 
         _install_attr($package, $name, $args);
     }
+}
+
+sub add_role {
+    my $package = shift;
+    my $class   = shift;
+
+    Boose::Loader::load($class);
+
+    $class->check_required_methods($package);
+    $class->import_methods;
 }
 
 sub _install_attr {
