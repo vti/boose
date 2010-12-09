@@ -3,7 +3,8 @@ package Boose::Loader;
 use strict;
 use warnings;
 
-use Boose::Loader::Exception;
+use Boose::Exception;
+use Boose::Util;
 use Try::Tiny;
 
 sub is_class_loaded {
@@ -29,26 +30,23 @@ sub load {
 
     return if is_class_loaded($class);
 
-    $class =~ s{::}{/};
-    $class .= '.pm';
-
-    my $e;
+    my $path = class_to_path($class);
 
     try {
-        require $class;
+        require $path;
     }
     catch {
-        $e = Boose::Loader::Exception->new($_, class => $class);
+        my $e = $_;
+
+        if ($e =~ m/\ACan't locate $path in \@INC/) {
+            Boose::Exception->throw('Boose::Exception::ClassNotFound', class => $class);
+        }
+        else {
+            Boose::Exception->throw('Boose::Exception::CantLoadClass', class => $class);
+        }
     };
 
-    #do {
-        #local $@;
-        #eval {require $class;};
-        #$e = Boose::Loader::Exception->new($@, class => $class) if $@;
-        #return $e;
-    #};
-
-    return $e;
+    return 1;
 }
 
 1;
