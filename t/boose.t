@@ -8,7 +8,6 @@ extends 'Boose::Base';
 has [qw/foo bar/];
 has 'baz';
 has 'default';
-has 'wrong';
 
 sub new {
     my $self = shift->SUPER::new(@_);

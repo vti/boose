@@ -31,12 +31,16 @@ sub attr {
     my $names   = shift;
     my $args    = shift;
 
-    Capr::croak('->attrs must be called on class, not on object')
+    Carp::croak('->attrs must be called on class, not on object')
       if ref $package;
 
     $names = [$names] unless ref $names eq 'ARRAY';
 
     foreach my $name (@$names) {
+        Carp::croak(
+            "Your attr name '$name' conflicts with class '$package' method")
+          if $package->can($name);
+
         _install_attr($package, $name, $args);
     }
 }

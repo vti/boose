@@ -44,7 +44,7 @@ sub extends {
     push @{"$package\::ISA"}, $class;
 }
 
-sub has   { Boose::Base->attr(@_) }
+sub has   { caller->attr(@_) }
 sub throw { Boose::Exception->throw(@_) }
 
 sub _install_sub {
