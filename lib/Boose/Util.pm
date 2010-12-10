@@ -1,11 +1,11 @@
 package Boose::Util;
 
-use vars qw(@EXPORT @EXPORT_OK $VERSION @ISA);
+use strict;
+use warnings;
 
-BEGIN {
-    require Exporter;
-    @ISA = qw(Exporter);
-}
+use base 'Exporter';
+
+use vars qw(@EXPORT @EXPORT_OK $VERSION @ISA);
 
 @EXPORT = @EXPORT_OK = qw(is_class_loaded class_to_path install_sub);
 

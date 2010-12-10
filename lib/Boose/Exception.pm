@@ -19,7 +19,7 @@ sub caught {
 sub throw {
     my $self  = shift;
     my $class = shift;
-    my @args = @_;
+    my @args  = @_;
 
     my $path = class_to_path($class);
 
@@ -37,7 +37,7 @@ sub throw {
         Carp::croak("Can't throw exception '$class': $_");
     };
 
-    $new->throw if $new;
+    Carp::croak($new) if $new;
 }
 
 1;

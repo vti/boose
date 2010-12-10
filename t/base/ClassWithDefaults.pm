@@ -1,4 +1,4 @@
-package Foo;
+package ClassWithDefaults;
 use Boose;
 
 extends 'Boose::Base';

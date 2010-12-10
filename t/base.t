@@ -2,6 +2,6 @@
 
 use lib 't/lib';
 
-use TestLoader qw(t/defaults);
+use TestLoader qw(t/base);
 
 Test::Class->runtests;
