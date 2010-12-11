@@ -54,6 +54,33 @@ sub add_role {
     $class->import_methods;
 }
 
+sub throw {
+    my $class   = shift;
+    my $message = shift;
+
+    Carp::croak($message);
+}
+
+sub get {
+    my $self = shift;
+    my $name = shift;
+
+    Carp::croak('Attribute name is required') unless defined $name;
+
+    my $method = "get_$name";
+    return $self->$method;
+}
+
+sub set {
+    my $self = shift;
+    my $name = shift;
+
+    Carp::croak('Attribute name is required') unless defined $name;
+
+    my $method = "set_$name";
+    return $self->$method(@_);
+}
+
 sub _install_attr {
     my ($package, $name, $args) = @_;
 
@@ -97,13 +124,6 @@ sub _install_attr {
             }
         );
     }
-}
-
-sub throw {
-    my $class   = shift;
-    my $message = shift;
-
-    Carp::croak($message);
 }
 
 1;
