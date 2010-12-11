@@ -6,6 +6,7 @@ use warnings;
 require Carp;
 
 use Boose::Loader;
+use Boose::Util 'install_sub';
 
 sub new {
     my $class = shift;
@@ -18,7 +19,7 @@ sub new {
     foreach my $key (keys %$self) {
         Carp::croak(
             "Unknown attribute '$key' passed to the 'new' contructor of '$class'"
-        ) unless $self->can($key);
+        ) unless $self->can("get_$key");
     }
 
     $self->BUILD if $self->can('BUILD');
@@ -39,10 +40,6 @@ sub attr {
     $names = [$names] unless ref $names eq 'ARRAY';
 
     foreach my $name (@$names) {
-        Carp::croak(
-            "Your attr name '$name' conflicts with class '$package' method")
-          if $package->can($name);
-
         _install_attr($package, $name, $args);
     }
 }
@@ -60,27 +57,46 @@ sub add_role {
 sub _install_attr {
     my ($package, $name, $args) = @_;
 
+    Carp::croak(
+        "Your attr name '$name' conflicts with class '$package' method")
+      if $package->can($name);
+
     $args ||= {};
+    $args = {default => $args} if ref $args ne 'HASH';
 
-    no strict 'refs';
-    *{$package . '::' . $name} = sub {
-        @_ > 1
-          ? do { $_[0]->{$name} = $_[1]; $_[0] }
-          : do {
+    my $default = $args->{default};
+
+    Carp::croak('Default value must be a SCALAR or CODEREF')
+      if ref $default && ref $default ne 'CODE';
+
+    my $is = delete $args->{is} || '';
+
+    install_sub(
+        $package => "get_$name" => sub {
             return $_[0]->{$name} if exists $_[0]->{$name};
-
-            my $default = ref $args eq 'HASH' ? $args->{default} : $args;
-            return unless defined $default;
-
-            Carp::croak('Default value must be a SCALAR or CODEREF')
-              if ref $default && ref $default ne 'CODE';
 
             $_[0]->{$name} =
               ref $default eq 'CODE'
               ? $default->($_[0])
               : $default;
-          };
-    };
+        }
+    );
+
+    if ($is ne 'ro') {
+        install_sub(
+            $package => "set_$name" => sub {
+                $_[0]->{$name} = $_[1];
+                $_[0];
+            }
+        );
+    }
+    else {
+        install_sub(
+            $package => "set_$name" => sub {
+                Carp::croak("Attribute '$name' is read only");
+            }
+        );
+    }
 }
 
 sub throw {

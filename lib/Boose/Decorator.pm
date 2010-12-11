@@ -15,7 +15,7 @@ sub new {
 
     my $self = $class->SUPER::new(@_);
 
-    $self->decorated($decorated);
+    $self->set_decorated($decorated);
 
     return $self;
 }
@@ -33,7 +33,7 @@ sub AUTOLOAD {
 
     $method = (split '::' => $method)[-1];
 
-    return $self->decorated->$method(@_);
+    return $self->get_decorated->$method(@_);
 }
 
 1;

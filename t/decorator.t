@@ -17,7 +17,7 @@
 
     extends 'Boose::Decorator';
 
-    sub foo { shift->decorated->foo . ' there' }
+    sub foo { shift->get_decorated->foo . ' there' }
 }
 
 package main;

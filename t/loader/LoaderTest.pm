@@ -22,7 +22,7 @@ sub not_found : Test(2) {
     }
     catch {
         ok(Boose::Exception->caught($_ => 'Boose::Exception::ClassNotFound'));
-        is $_->class => 'UnlikelyToExist42';
+        is $_->get_class => 'UnlikelyToExist42';
     };
 }
 
@@ -32,7 +32,7 @@ sub syntax_errors : Test(2) {
     }
     catch {
         ok(Boose::Exception->caught($_ => 'Boose::Exception::CantLoadClass'));
-        is $_->class => 'ClassWithSyntaxErrors';
+        is $_->get_class => 'ClassWithSyntaxErrors';
     };
 }
 

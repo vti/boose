@@ -34,7 +34,7 @@ sub exception_via_loader : Test(3) {
             message => 'Something bad happened');
     }
     catch {
-        like $_->message => qr/Something bad happened/;
+        like $_->get_message => qr/Something bad happened/;
 
         ok(Boose::Exception->caught($_ => 'Exception'));
         ok !Boose::Exception->caught($_ => 'Unknown');
@@ -46,7 +46,7 @@ sub exception_directly : Test(3) {
         Exception->throw(message => 'Something bad happened');
     }
     catch {
-        like $_->message => qr/Something bad happened/;
+        like $_->get_message => qr/Something bad happened/;
 
         ok(Boose::Exception->caught($_ => 'Exception'));
         ok !Boose::Exception->caught($_ => 'Unknown');

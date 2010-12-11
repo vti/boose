@@ -17,8 +17,8 @@ sub isa_is_correct : Test(3) {
     my $object = $self->_build_object(foo => 1, foofoo => 2);
 
     ok $object->isa('Child');
-    is $object->foo    => 1;
-    is $object->foofoo => 2;
+    is $object->get_foo    => 1;
+    is $object->get_foofoo => 2;
 }
 
 1;

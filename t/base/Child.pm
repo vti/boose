@@ -8,7 +8,7 @@ has 'foofoo';
 sub new {
     my $self = shift->SUPER::new(@_);
 
-    $self->{foofoo} //= 3;
+    $self->set_foofoo(3) unless defined $self->get_foo;
 
     return $self;
 }
