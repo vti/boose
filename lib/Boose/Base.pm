@@ -6,7 +6,7 @@ use warnings;
 require Carp;
 
 use Boose::Loader;
-use Boose::Util 'install_sub';
+use Boose::Util qw(install_sub install_alias);
 
 sub new {
     my $class = shift;
@@ -108,6 +108,8 @@ sub _install_attr {
               : $default;
         }
     );
+
+    install_alias($package => $name => "get_$name");
 
     if ($is ne 'ro') {
         install_sub(

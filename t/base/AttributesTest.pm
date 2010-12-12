@@ -34,6 +34,15 @@ sub empty : Test(3) {
     ok not defined $object->get_baz;
 }
 
+sub getters : Test(2) {
+    my $self = shift;
+
+    my $object = $self->_build_object(foo => 'bar');
+
+    is $object->get_foo => 'bar';
+    is $object->foo     => 'bar';
+}
+
 sub constructor_with_unknown_attribute : Tests(1) {
     my $self = shift;
 

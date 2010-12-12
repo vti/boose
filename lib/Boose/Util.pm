@@ -8,7 +8,7 @@ use base 'Exporter';
 use vars qw(@EXPORT @EXPORT_OK $VERSION @ISA);
 
 @EXPORT = @EXPORT_OK =
-  qw(is_class_loaded class_to_path install_sub modify_sub);
+  qw(is_class_loaded class_to_path install_sub install_alias modify_sub);
 
 sub is_class_loaded {
     my $class = shift;
@@ -25,6 +25,14 @@ sub class_to_path {
     $class .= '.pm';
 
     return $class;
+}
+
+sub install_alias {
+    my $package = shift;
+    my ($alias, $name) = @_;
+
+    no strict 'refs';
+    *{"$package\::$alias"} = *{"$package\::$name"};
 }
 
 sub install_sub {
