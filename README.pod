@@ -26,7 +26,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
 
     Car->new(number => 12345);
 
-=head2 Chained accessors
+=head2 Accessors
 
     package Car;
     use Boose;
@@ -38,7 +38,26 @@ Boose is a lightweight Moose-like OO system for Perl5.
     ...
 
     my $car = Car->new;
-    $car->number(54321)->size('small');
+
+    $car->number;
+
+    # or
+
+    $car->get_number;
+
+=head2 Chained mutators
+
+    package Car;
+    use Boose;
+
+    has number => {default => 12345};
+
+    has size => {default => 'big'};
+
+    ...
+
+    my $car = Car->new;
+    $car->set_number(54321)->set_size('small');
 
 =head2 Roles
 
