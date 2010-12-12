@@ -5,6 +5,7 @@ use warnings;
 
 require Carp;
 
+use Boose::Meta;
 use Boose::Loader;
 use Boose::Util qw(install_sub install_alias);
 
@@ -13,13 +14,12 @@ sub new {
     $class = ref $class if ref $class;
 
     my $self = {@_};
-
     bless $self, $class;
 
     foreach my $key (keys %$self) {
         Carp::croak(
             "Unknown attribute '$key' passed to the 'new' contructor of '$class'"
-        ) unless $self->can("get_$key");
+        ) unless $self->meta->attr_exists($key);
     }
 
     $self->BUILD if $self->can('BUILD');
@@ -28,6 +28,13 @@ sub new {
 }
 
 sub DESTROY { }
+
+sub meta {
+    my $class = shift;
+    $class = ref $class if ref $class;
+
+    return $Boose::Meta::classes{$class} ||= Boose::Meta->new($class);
+}
 
 sub attr {
     my $package = shift;
@@ -54,68 +61,48 @@ sub add_role {
     $class->import_methods;
 }
 
-sub throw {
-    my $class   = shift;
-    my $message = shift;
-
-    Carp::croak($message);
-}
+sub throw { shift; Carp::croak(@_); }
 
 sub get {
     my $self = shift;
     my $name = shift;
 
-    Carp::croak('Attribute name is required') unless defined $name;
+    Carp::croak("Attribute's name is required") unless defined $name;
 
-    my $method = "get_$name";
-    return $self->$method;
+    return $self->{$name} if exists $self->{$name};
+
+    my $default = $self->meta->attr($name)->default;
+
+    return $self->{$name} =
+      ref $default eq 'CODE' ? $default->($self) : $default;
 }
 
 sub set {
-    my $self = shift;
-    my $name = shift;
+    my $self  = shift;
+    my $name  = shift;
+    my $value = shift;
 
-    Carp::croak('Attribute name is required') unless defined $name;
+    Carp::croak("Attribute's name is required") unless defined $name;
 
-    my $method = "set_$name";
-    return $self->$method(@_);
+    $self->{$name} = $value;
+
+    return $self;
 }
 
 sub _install_attr {
     my ($package, $name, $args) = @_;
 
-    Carp::croak(
-        "Your attr name '$name' conflicts with class '$package' method")
-      if $package->can($name);
+    my $attr = $package->meta->add_attr($name, $args);
+    return if not defined $attr->is;
 
-    $args ||= {};
-    $args = {default => $args} if ref $args ne 'HASH';
-
-    my $default = $args->{default};
-
-    Carp::croak('Default value must be a SCALAR or CODEREF')
-      if ref $default && ref $default ne 'CODE';
-
-    my $is = delete $args->{is} || '';
-
-    install_sub(
-        $package => "get_$name" => sub {
-            return $_[0]->{$name} if exists $_[0]->{$name};
-
-            $_[0]->{$name} =
-              ref $default eq 'CODE'
-              ? $default->($_[0])
-              : $default;
-        }
-    );
+    install_sub($package => "get_$name" => sub { $_[0]->get($name) });
 
     install_alias($package => $name => "get_$name");
 
-    if ($is ne 'ro') {
+    if ($attr->is ne 'ro') {
         install_sub(
             $package => "set_$name" => sub {
-                $_[0]->{$name} = $_[1];
-                $_[0];
+                shift->set($name => @_);
             }
         );
     }

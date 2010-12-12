@@ -40,8 +40,6 @@ sub install_sub {
     my $name    = shift;
     my $sub     = shift;
 
-    return if $package->can($name);
-
     no strict 'refs';
     *{$package . '::' . $name} = $sub;
 }
