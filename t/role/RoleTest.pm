@@ -1,4 +1,4 @@
-package IteratorTest;
+package RoleTest;
 
 use strict;
 use warnings;
