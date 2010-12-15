@@ -31,10 +31,15 @@ sub load {
         my $e = $_;
 
         if ($e =~ m/\ACan't locate $path in \@INC/) {
-            Boose::Exception->throw('Boose::Exception::ClassNotFound', class => $class);
+            Boose::Exception->throw('Boose::Exception::ClassNotFound',
+                class => $class);
         }
         else {
-            Boose::Exception->throw('Boose::Exception::CantLoadClass', class => $class);
+            Boose::Exception->throw(
+                'Boose::Exception::CantLoadClass',
+                class       => $class,
+                description => "$e"
+            );
         }
     };
 
