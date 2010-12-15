@@ -20,29 +20,21 @@ sub throw {
     my $self  = shift;
     my $class = shift;
 
-    if (blessed($class)) {
-        Carp::croak($class);
-    }
+    my $e;
 
-    my @args  = @_;
-
-    my $path = class_to_path($class);
-
-    # Can't use Boose::Loader here, because
-    # the exception could be thrown from it too
-    my $new;
-    try {
-        if (!is_class_loaded($class)) {
-            require $path;
+    if ($class->isa('Boose::Exception::Base')) {
+        if (blessed($class)) {
+            $e = $class;
         }
-
-        $new = $class->new(@args);
+        else {
+            $e = $class->new(@_);
+        }
     }
-    catch {
-        Carp::croak("Can't throw exception '$class': $_");
-    };
+    else {
+        $e = $class;
+    }
 
-    Carp::croak($new) if $new;
+    Carp::croak($e);
 }
 
 1;

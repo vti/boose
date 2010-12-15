@@ -9,6 +9,7 @@ use Boose::Exception;
 use Boose::Util qw(install_sub modify_sub);
 
 use Try::Tiny;
+require Carp;
 
 our $VERSION = '0.0001';
 

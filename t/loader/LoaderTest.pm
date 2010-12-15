@@ -9,6 +9,7 @@ use Test::More;
 
 use Try::Tiny;
 use Boose::Loader;
+use Boose::Exception;
 
 sub normal : Test(1) {
     my $self = shift;

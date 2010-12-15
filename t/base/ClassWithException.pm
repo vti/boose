@@ -3,8 +3,10 @@ use Boose;
 
 extends 'Boose::Base';
 
+use Exception;
+
 sub mortal {
-    throw 'Exception', message => 'Error!';
+    Exception->throw(message => 'Error!');
 }
 
 1;

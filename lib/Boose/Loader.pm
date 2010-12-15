@@ -3,7 +3,8 @@ package Boose::Loader;
 use strict;
 use warnings;
 
-use Boose::Exception;
+use Boose::Exception::ClassNotFound;
+use Boose::Exception::CantLoadClass;
 use Boose::Util;
 use Try::Tiny;
 
@@ -31,12 +32,10 @@ sub load {
         my $e = $_;
 
         if ($e =~ m/\ACan't locate $path in \@INC/) {
-            Boose::Exception->throw('Boose::Exception::ClassNotFound',
-                class => $class);
+            Boose::Exception::ClassNotFound->throw(class => $class);
         }
         else {
-            Boose::Exception->throw(
-                'Boose::Exception::CantLoadClass',
+            Boose::Exception::CantLoadClass->throw(
                 class       => $class,
                 description => "$e"
             );

@@ -61,8 +61,6 @@ sub add_role {
     $class->import_methods;
 }
 
-sub throw { shift; Carp::croak(@_); }
-
 sub get {
     my $self = shift;
     my $name = shift;
