@@ -19,6 +19,11 @@ sub caught {
 sub throw {
     my $self  = shift;
     my $class = shift;
+
+    if (blessed($class)) {
+        Carp::croak($class);
+    }
+
     my @args  = @_;
 
     my $path = class_to_path($class);

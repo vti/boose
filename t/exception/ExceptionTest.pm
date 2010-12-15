@@ -19,6 +19,15 @@ sub cant_find_exception_class : Test(1) {
     };
 }
 
+sub throw_object : Test(1) {
+    try {
+        Boose::Exception->throw(Exception->new);
+    }
+    catch {
+        like $_ => qr/Exception raised/;
+    };
+}
+
 sub cant_create_exception_object : Test(1) {
     try {
         Exception->throw(foo => 'bar');
