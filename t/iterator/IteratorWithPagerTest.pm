@@ -33,7 +33,7 @@ sub next_page : Test() {
     is $page->size => 2;
 }
 
-sub next_page_bigger_than_total_size : Test(6) {
+sub next_page_bigger_than_total_size : Test(5) {
     my $self = shift;
 
     my $i = $self->_create_iterator(1, 2, 3);
@@ -48,7 +48,7 @@ sub next_page_bigger_than_total_size : Test(6) {
     is $page->size => 0;
 }
 
-sub prev_page : Test(4) {
+sub prev_page : Test(3) {
     my $self = shift;
 
     my $i = $self->_create_iterator(1, 2, 3);

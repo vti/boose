@@ -31,7 +31,7 @@ sub add_attr : Test(3) {
     is $meta->attr('foo')->name => 'foo';
 }
 
-sub add_attr_with_args : Test(3) {
+sub add_attr_with_args : Test(1) {
     my $self = shift;
 
     my $meta = $self->_build_object;

@@ -58,7 +58,7 @@ sub reverse : Test(8) {
     ok not defined $i->next;
 }
 
-sub rewind : Test(3) {
+sub rewind : Test(1) {
     my $self = shift;
 
     my $i = $self->_create_iterator(1, 2, 3);
