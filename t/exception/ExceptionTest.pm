@@ -51,4 +51,15 @@ sub exception_with_default_message : Test(2) {
     };
 }
 
+sub stringnification : Test(2) {
+    try {
+        Exception->throw;
+    }
+    catch {
+        like $_ => qr/Exception raised/;
+
+        ok(Boose::Exception->caught($_ => 'Exception'));
+    };
+}
+
 1;

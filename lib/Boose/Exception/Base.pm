@@ -9,6 +9,6 @@ use overload 'bool' => sub { shift; }, fallback => 1;
 
 __PACKAGE__->attr(message => 'Exception');
 
-sub to_string { shift->get_message }
+sub to_string { shift->message }
 
 1;
