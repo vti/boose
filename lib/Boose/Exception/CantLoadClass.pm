@@ -10,7 +10,7 @@ sub message {
 
     my $class = $self->class;
     my $description = $self->description;
-    return "Can't load class '$class': $description asdfasdf";
+    return "Can't load class '$class': $description";
 }
 
 1;
