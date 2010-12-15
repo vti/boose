@@ -38,21 +38,6 @@ sub add_attr_with_args : Test(3) {
 
     $meta->add_attr('foo' => 1);
     is $meta->attr('foo')->default => 1;
-
-    #$meta->add_attr('foo' => {default => 1});
-    #is $meta->attr('foo')->default => 1;
-}
-
-sub add_attr_that_already_exists : Test(1) {
-    my $self = shift;
-
-    my $meta = $self->_build_object;
-
-    $meta->add_attr('foo');
-
-    eval { $meta->add_attr('foo') };
-
-    ok $@;
 }
 
 1;

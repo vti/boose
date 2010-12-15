@@ -39,9 +39,6 @@ sub add_attr {
     my $self = shift;
     my ($name, $args) = @_;
 
-    Carp::croak("Attribute '$name' already exists")
-      if exists $self->{attrs}->{$name};
-
     $args ||= {};
     $args = {default => $args} if ref $args ne 'HASH';
 

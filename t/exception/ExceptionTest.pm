@@ -28,19 +28,6 @@ sub cant_create_exception_object : Test(1) {
     };
 }
 
-sub exception_via_loader : Test(3) {
-    try {
-        Boose::Exception->throw('Exception',
-            message => 'Something bad happened');
-    }
-    catch {
-        like $_->get_message => qr/Something bad happened/;
-
-        ok(Boose::Exception->caught($_ => 'Exception'));
-        ok !Boose::Exception->caught($_ => 'Unknown');
-    };
-}
-
 sub exception_directly : Test(3) {
     try {
         Exception->throw(message => 'Something bad happened');
@@ -50,6 +37,17 @@ sub exception_directly : Test(3) {
 
         ok(Boose::Exception->caught($_ => 'Exception'));
         ok !Boose::Exception->caught($_ => 'Unknown');
+    };
+}
+
+sub exception_with_default_message : Test(2) {
+    try {
+        Exception->throw;
+    }
+    catch {
+        like $_->get_message => qr/Exception raised/;
+
+        ok(Boose::Exception->caught($_ => 'Exception'));
     };
 }
 
