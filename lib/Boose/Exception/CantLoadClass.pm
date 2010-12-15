@@ -7,7 +7,8 @@ __PACKAGE__->attr('class');
 sub message {
     my $self = shift;
 
-    return "Can't load class ";
+    my $class = $self->class;
+    return "Can't load class '$class'";
 }
 
 1;

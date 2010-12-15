@@ -16,22 +16,24 @@ sub normal : Test(1) {
     ok(Boose::Loader::load('NormalClass'));
 }
 
-sub not_found : Test(2) {
+sub not_found : Test(3) {
     try {
         Boose::Loader::load('UnlikelyToExist42');
     }
     catch {
         ok(Boose::Exception->caught($_ => 'Boose::Exception::ClassNotFound'));
+        like $_->message => qr/Can't find class 'UnlikelyToExist42'/;
         is $_->get_class => 'UnlikelyToExist42';
     };
 }
 
-sub syntax_errors : Test(2) {
+sub syntax_errors : Test(3) {
     try {
         Boose::Loader::load('ClassWithSyntaxErrors');
     }
     catch {
         ok(Boose::Exception->caught($_ => 'Boose::Exception::CantLoadClass'));
+        like $_->message => qr/Can't load class 'ClassWithSyntaxErrors'/;
         is $_->get_class => 'ClassWithSyntaxErrors';
     };
 }
