@@ -11,6 +11,7 @@ has 'array' => {
 has 'hash' => {
     default => sub { {foo => 'bar'} }
 };
+has 'code' => sub {1};
 
 has 'simple' => 2;
 

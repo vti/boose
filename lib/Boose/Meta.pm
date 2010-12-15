@@ -4,23 +4,26 @@ use strict;
 use warnings;
 
 require Carp;
-require Storable;
 
 use Boose::Meta::Attr;
 
 our %classes;
 
 sub new {
-    my $class = shift;
+    my $class     = shift;
     my $for_class = shift;
 
-    foreach my $parent (_get_parents($for_class)) {
-        if (my $parent_meta = $classes{$parent}) {
-            my $meta = Storable::dclone($parent_meta);
+    if ($for_class) {
+        foreach my $parent (_get_parents($for_class)) {
+            if (my $parent_meta = $classes{$parent}) {
+                my $meta = __PACKAGE__->new;
 
-            $meta->set_class($for_class);
+                $meta->{attrs} = {%{$parent_meta->attrs}};
 
-            return $meta;
+                $meta->set_class($for_class);
+
+                return $meta;
+            }
         }
     }
 
@@ -50,7 +53,8 @@ sub add_attr {
     $self->{attrs}->{$name} = Boose::Meta::Attr->new(name => $name, %$args);
 }
 
-sub attr { $_[0]->{attrs}->{$_[1]} }
+sub attr  { $_[0]->{attrs}->{$_[1]} }
+sub attrs { $_[0]->{attrs} }
 
 sub attr_exists {
     my $self = shift;
@@ -67,8 +71,9 @@ sub _get_parents {
 
     # shift our class name
     foreach my $sub_class (@{"${class}::ISA"}) {
-        push(@parents, _get_parents($sub_class))
-          if ($sub_class->isa('Boose::Base'));
+        if ($sub_class->isa('Boose::Base')) {
+            push @parents, _get_parents($sub_class);
+        }
     }
 
     return $class, @parents;

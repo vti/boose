@@ -69,7 +69,7 @@ sub overwritable_accessor : Test(1) {
     is $object->overwritable => '123';
 }
 
-sub empty_with_defaults : Test(4) {
+sub empty_with_defaults : Test(5) {
     my $self = shift;
 
     my $object = $self->_build_object_with_defaults;
@@ -77,6 +77,7 @@ sub empty_with_defaults : Test(4) {
     is $object->get_str          => 'Hello';
     is_deeply $object->get_array => [qw/1 2 3/];
     is_deeply $object->get_hash  => {foo => 'bar'};
+    is $object->get_code         => 1;
 }
 
 sub empty_values : Test(4) {
