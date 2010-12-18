@@ -96,7 +96,7 @@ sub _install_attr {
     install_sub(
         $package => "get_$name" => sub {
             Carp::croak("To change '$name' value, use 'set_$name' instead")
-              if $_[1];
+              if @_ > 1;
             $_[0]->get($name);
         }
     );
