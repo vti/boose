@@ -7,6 +7,8 @@ use Try::Tiny;
 use Scalar::Util 'blessed';
 require Carp;
 
+our @CARP_NOT = 'Boose';
+
 sub caught {
     my $self = shift;
     my ($e, $class) = @_;
