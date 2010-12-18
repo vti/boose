@@ -43,6 +43,23 @@ sub getters : Test(2) {
     is $object->foo     => 'bar';
 }
 
+sub attempt_setting_value_via_getter : Test(2) {
+    my $self = shift;
+
+    my $object = $self->_build_object;
+
+    my $e;
+    try {
+        $object->foo('bar');
+    }
+    catch {
+        $e = $_;
+    };
+
+    ok $e;
+    like $e => qr/To change 'foo' value, use 'set_foo' instead/;
+}
+
 sub constructor_with_unknown_attribute : Tests(1) {
     my $self = shift;
 

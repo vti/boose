@@ -93,7 +93,13 @@ sub _install_attr {
     my $attr = $package->meta->add_attr($name, $args);
     return if not defined $attr->is;
 
-    install_sub($package => "get_$name" => sub { $_[0]->get($name) });
+    install_sub(
+        $package => "get_$name" => sub {
+            Carp::croak("To change '$name' value, use 'set_$name' instead")
+              if $_[1];
+            $_[0]->get($name);
+        }
+    );
 
     install_alias($package => $name => "get_$name");
 
