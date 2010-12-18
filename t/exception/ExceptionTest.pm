@@ -19,6 +19,15 @@ sub throw_object : Test(1) {
     };
 }
 
+sub throw_string : Test(1) {
+    try {
+        Boose::Exception->throw('[foobar]');
+    }
+    catch {
+        like $_ => qr/\[foobar\]/;
+    };
+}
+
 sub exception_directly : Test(3) {
     try {
         Exception->throw(message => 'Something bad happened');

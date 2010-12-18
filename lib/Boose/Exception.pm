@@ -17,22 +17,16 @@ sub caught {
 }
 
 sub throw {
-    my $self  = shift;
-    my $class = shift;
+    my $self = shift;
+    my $e    = shift;
 
-    my $e;
-
-    if ($class->isa('Boose::Exception::Base')) {
-        if (blessed($class)) {
-            $e = $class;
+    eval {
+        if ($e->isa('Boose::Exception::Base')) {
+            if (!blessed($e)) {
+                $e = $e->new(@_);
+            }
         }
-        else {
-            $e = $class->new(@_);
-        }
-    }
-    else {
-        $e = $class;
-    }
+    };
 
     Carp::croak($e);
 }
