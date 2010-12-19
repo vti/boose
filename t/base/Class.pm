@@ -6,8 +6,9 @@ extends 'Boose::Base';
 has [qw/foo bar/];
 has 'baz';
 has 'default';
-has 'read_only' => {is => 'ro'};
-has 'overwritable' => {is => undef};
+has 'read_only'    => {is       => 'ro'};
+has 'overwritable' => {is       => undef};
+has 'weak'         => {weak_ref => 1};
 
 sub new {
     my $self = shift->SUPER::new(@_);
@@ -17,6 +18,6 @@ sub new {
     return $self;
 }
 
-sub overwritable { '123' }
+sub overwritable {'123'}
 
 1;

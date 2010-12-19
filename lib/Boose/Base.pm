@@ -9,6 +9,8 @@ use Boose::Meta;
 use Boose::Loader;
 use Boose::Util qw(install_sub install_alias);
 
+use Scalar::Util 'weaken';
+
 sub new {
     my $class = shift;
     $class = ref $class if ref $class;
@@ -83,6 +85,11 @@ sub set {
     Carp::croak("Attribute's name is required") unless defined $name;
 
     $self->{$name} = $value;
+
+    my $attr = $self->meta->attr($name);
+    if ($attr->is_weak_ref) {
+        weaken $self->{$name};
+    }
 
     return $self;
 }

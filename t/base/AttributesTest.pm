@@ -158,4 +158,17 @@ sub exception : Test(1) {
     };
 }
 
+sub weak_refs : Test(1) {
+    my $self = shift;
+
+    my $object = $self->_build_object;
+
+    my $hash_ref = {foo => 'bar'};
+
+    $object->set_weak($hash_ref);
+    undef $hash_ref;
+
+    ok not defined $object->weak;
+}
+
 1;

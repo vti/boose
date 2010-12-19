@@ -15,8 +15,9 @@ sub new {
     return $self;
 }
 
-sub name    { $_[0]->{name} }
-sub default { $_[0]->{default} }
-sub is      { $_[0]->{is} }
+sub name        { $_[0]->{name} }
+sub default     { $_[0]->{default} }
+sub is          { $_[0]->{is} }
+sub is_weak_ref { !!$_[0]->{weak_ref} }
 
 1;
