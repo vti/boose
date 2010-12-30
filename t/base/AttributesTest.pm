@@ -11,10 +11,12 @@ use Try::Tiny;
 use Class;
 use ClassWithDefaults;
 use ClassWithException;
+use ClassWithStatic;
 
 sub _build_object                { shift; Class->new(@_) }
 sub _build_object_with_defaults  { shift; ClassWithDefaults->new(@_) }
 sub _build_object_with_exception { shift; ClassWithException->new(@_) }
+sub _build_object_with_static    { shift; ClassWithStatic->new(@_) }
 
 sub isa_is_correct : Test(1) {
     my $self = shift;
@@ -169,6 +171,20 @@ sub weak_refs : Test(1) {
     undef $hash_ref;
 
     ok not defined $object->weak;
+}
+
+sub static_attribute : Test(4) {
+    my $self = shift;
+
+    ClassWithStatic->set_state('foo');
+    is(ClassWithStatic->state, 'foo');
+
+    my $object = $self->_build_object_with_static;
+    is $object->state => 'foo';
+
+    $object->set_state('bar');
+    is $object->state => 'bar';
+    is(ClassWithStatic->state, 'bar');
 }
 
 1;

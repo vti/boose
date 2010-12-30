@@ -53,6 +53,21 @@ sub attr {
     }
 }
 
+sub static_attr {
+    my $package = shift;
+    my $names   = shift;
+    my $args    = shift;
+
+    Carp::croak('->static_attr must be called on class, not object')
+      if ref $package;
+
+    $names = [$names] unless ref $names eq 'ARRAY';
+
+    foreach my $name (@$names) {
+        _install_static_attr($package, $name, $args);
+    }
+}
+
 sub add_role {
     my $package = shift;
     my $class   = shift;
@@ -114,6 +129,38 @@ sub _install_attr {
         install_sub(
             $package => "set_$name" => sub {
                 shift->set($name => @_);
+            }
+        );
+    }
+    else {
+        install_sub(
+            $package => "set_$name" => sub {
+                Carp::croak("Attribute '$name' is read only");
+            }
+        );
+    }
+}
+
+sub _install_static_attr {
+    my ($package, $name, $args) = @_;
+
+    my $attr = $package->meta->add_attr($name, $args);
+    #return if not defined $attr->is;
+
+    install_sub(
+        $package => "get_$name" => sub {
+            Carp::croak("To change '$name' value, use 'set_$name' instead")
+              if @_ > 1;
+            $_[0]->meta->attr($name)->static_value;
+        }
+    );
+
+    install_alias($package => $name => "get_$name");
+
+    if ($attr->is ne 'ro') {
+        install_sub(
+            $package => "set_$name" => sub {
+                shift->meta->attr($name)->set_static_value(@_);
             }
         );
     }
