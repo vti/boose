@@ -14,7 +14,7 @@ sub new {
     my $for_class = shift;
 
     if ($for_class) {
-        foreach my $parent (_get_parents($for_class)) {
+        foreach my $parent ($class->get_parents($for_class)) {
             if (my $parent_meta = $classes{$parent}) {
                 my $meta = __PACKAGE__->new;
 
@@ -47,7 +47,7 @@ sub add_attr {
     Carp::croak('Default value must be a SCALAR or CODEREF')
       if ref $default && ref $default ne 'CODE';
 
-    $self->{attrs}->{$name} = Boose::Meta::Attr->new(name => $name, %$args);
+    $self->{attrs}->{$name} = $self->_build_attr(name => $name, %$args);
 }
 
 sub attr  { $_[0]->{attrs}->{$_[1]} }
@@ -60,20 +60,24 @@ sub attr_exists {
     return !!exists $self->{attrs}->{$name};
 }
 
-sub _get_parents {
-    my $class = shift;
+sub get_parents {
+    my $class     = shift;
+    my $for_class = shift;
+
     my @parents;
 
     no strict 'refs';
 
     # shift our class name
-    foreach my $sub_class (@{"${class}::ISA"}) {
+    foreach my $sub_class (@{"${for_class}::ISA"}) {
         if ($sub_class->isa('Boose::Base')) {
-            push @parents, _get_parents($sub_class);
+            push @parents, $class->get_parents($sub_class);
         }
     }
 
-    return $class, @parents;
+    return $for_class, @parents;
 }
+
+sub _build_attr { shift; Boose::Meta::Attr->new(@_) }
 
 1;
