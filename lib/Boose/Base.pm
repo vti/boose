@@ -11,6 +11,8 @@ use Boose::Util qw(install_sub install_alias);
 
 use Scalar::Util 'weaken';
 
+our @RESERVED_NAMES = (qw/new has static throw meta attr get set/);
+
 sub new {
     my $class = shift;
     $class = ref $class if ref $class;
@@ -41,30 +43,16 @@ sub meta {
 sub attr {
     my $package = shift;
     my $names   = shift;
-    my $args    = shift;
 
     Carp::croak('->attr must be called on class, not object')
       if ref $package;
 
     $names = [$names] unless ref $names eq 'ARRAY';
 
+    my @args = @_;
     foreach my $name (@$names) {
-        _install_attr($package, $name, $args);
-    }
-}
-
-sub static_attr {
-    my $package = shift;
-    my $names   = shift;
-    my $args    = shift;
-
-    Carp::croak('->static_attr must be called on class, not object')
-      if ref $package;
-
-    $names = [$names] unless ref $names eq 'ARRAY';
-
-    foreach my $name (@$names) {
-        _install_static_attr($package, $name, $args);
+        Carp::croak(qq/'$name' is a reserved name/) if grep {$name eq $_} @RESERVED_NAMES;
+        _install_attr($package, $name, @args);
     }
 }
 
@@ -84,12 +72,25 @@ sub get {
 
     Carp::croak("Attribute's name is required") unless defined $name;
 
-    return $self->{$name} if exists $self->{$name};
+    my $attr = $self->meta->attr($name);
 
-    my $default = $self->meta->attr($name)->default;
+    if ($attr->is_static) {
+        return $attr->static_value if $attr->is_static_value_set;
+    }
+    else {
+        return $self->{$name} if exists $self->{$name};
+    }
 
-    return $self->{$name} =
-      ref $default eq 'CODE' ? $default->($self) : $default;
+    my $default = $attr->default;
+    $default = $default->($self) if ref $default eq 'CODE';
+
+    if ($attr->is_static) {
+        $attr->set_static_value($default);
+        return $attr->static_value;
+    }
+    else {
+        return $self->{$name} = $default;
+    }
 }
 
 sub set {
@@ -99,10 +100,19 @@ sub set {
 
     Carp::croak("Attribute's name is required") unless defined $name;
 
-    $self->{$name} = $value;
-
     my $attr = $self->meta->attr($name);
+
+    if ($attr->is_static) {
+        $attr->set_static_value($value);
+    }
+    else {
+        $self->{$name} = $value;
+    }
+
     if ($attr->is_weak_ref) {
+        if ($attr->is_static) {
+            die 'TODO';
+        }
         weaken $self->{$name};
     }
 
@@ -110,9 +120,10 @@ sub set {
 }
 
 sub _install_attr {
-    my ($package, $name, $args) = @_;
+    my $package = shift;
+    my $name    = shift;
 
-    my $attr = $package->meta->add_attr($name, $args);
+    my $attr = $package->meta->add_attr($name, @_);
     return if not defined $attr->is;
 
     install_sub(
@@ -129,38 +140,6 @@ sub _install_attr {
         install_sub(
             $package => "set_$name" => sub {
                 shift->set($name => @_);
-            }
-        );
-    }
-    else {
-        install_sub(
-            $package => "set_$name" => sub {
-                Carp::croak("Attribute '$name' is read only");
-            }
-        );
-    }
-}
-
-sub _install_static_attr {
-    my ($package, $name, $args) = @_;
-
-    my $attr = $package->meta->add_attr($name, $args);
-    #return if not defined $attr->is;
-
-    install_sub(
-        $package => "get_$name" => sub {
-            Carp::croak("To change '$name' value, use 'set_$name' instead")
-              if @_ > 1;
-            $_[0]->meta->attr($name)->static_value;
-        }
-    );
-
-    install_alias($package => $name => "get_$name");
-
-    if ($attr->is ne 'ro') {
-        install_sub(
-            $package => "set_$name" => sub {
-                shift->meta->attr($name)->set_static_value(@_);
             }
         );
     }

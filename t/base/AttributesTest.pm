@@ -187,4 +187,10 @@ sub static_attribute : Test(4) {
     is(ClassWithStatic->state, 'bar');
 }
 
+sub static_attribute_with_default : Test(1) {
+    my $self = shift;
+
+    is_deeply(ClassWithStatic->default, {});
+}
+
 1;

@@ -21,9 +21,11 @@ sub name        { $_[0]->{name} }
 sub default     { $_[0]->{default} }
 sub is          { $_[0]->{is} }
 sub is_weak_ref { !!$_[0]->{weak_ref} }
+sub is_static   { !!$_[0]->{static} }
 
 sub set_static_value { $_[0]->{static_value} = $_[1] }
 sub static_value { $_[0]->{static_value} }
+sub is_static_value_set { !!exists $_[0]->{static_value} }
 
 sub clone {
     my $self = shift;
@@ -33,7 +35,8 @@ sub clone {
     my $is          = $self->is;
     my $is_weak_ref = $self->is_weak_ref;
 
-    my $static_value = Boose::Util::clone($self->static_value);
+    my $static_value =
+      $self->is_static ? Boose::Util::clone($self->static_value) : undef;
 
     return $self->new(
         name         => $name,

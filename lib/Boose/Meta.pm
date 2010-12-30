@@ -20,7 +20,8 @@ sub new {
                 my $meta = __PACKAGE__->new;
 
                 foreach my $name (keys %{$parent_meta->attrs}) {
-                    $meta->add_attr($name => $parent_meta->attr($name)->clone);
+                    $meta->add_attr(
+                        $name => $parent_meta->attr($name)->clone);
                 }
 
                 $meta->set_class($for_class);
@@ -40,15 +41,26 @@ sub set_class { $_[0]->{class} = $_[1] }
 
 sub add_attr {
     my $self = shift;
-    my ($name, $args) = @_;
+    my $name = shift;
 
-    if (blessed($args) && $args->isa('Boose::Meta::Attr')) {
-        $self->{attrs}->{$name} = $args;
+    if (blessed($_[0]) && $_[0]->isa('Boose::Meta::Attr')) {
+        $self->{attrs}->{$name} = shift;
         return;
     }
 
-    $args ||= {};
-    $args = {default => $args} if ref $args ne 'HASH';
+    my $args = {};
+
+    if (@_ == 1) {
+        if (ref $_[0] eq 'HASH') {
+            $args = $_[0];
+        }
+        else {
+            $args = {default => $_[0]};
+        }
+    }
+    else {
+        $args = {@_};
+    }
 
     my $default = $args->{default};
 

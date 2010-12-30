@@ -33,9 +33,14 @@ sub import_finalize {
         $package => around => sub { modify_sub($package, 'around', @_) });
 }
 
-sub has    { caller->attr(@_) }
-sub static { caller->static_attr(@_) }
-sub with   { caller->add_role(@_) }
-sub throw  { Boose::Exception->throw(@_) }
+sub has { caller->attr(@_) }
+
+sub static {
+    caller->attr(
+        @_ == 2 ? ($_[0], default => $_[1], static => 1) : (@_, static => 1));
+}
+
+sub with  { caller->add_role(@_) }
+sub throw { Boose::Exception->throw(@_) }
 
 1;
