@@ -1,8 +1,6 @@
 package Class;
 use Boose;
 
-extends 'Boose::Base';
-
 has [qw/foo bar/];
 has 'baz';
 has 'default';

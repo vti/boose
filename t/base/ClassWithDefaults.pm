@@ -1,8 +1,6 @@
 package ClassWithDefaults;
 use Boose;
 
-extends 'Boose::Base';
-
 has 'num' => {default => 1};
 has 'str' => {default => 'Hello'};
 has 'array' => {

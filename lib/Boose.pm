@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Boose::Import';
 
+use Boose::Base;
 use Boose::Exception;
 use Boose::Util qw(install_sub modify_sub);
 
@@ -15,6 +16,11 @@ our $VERSION = '0.0001';
 sub import_finalize {
     my $class   = shift;
     my $package = shift;
+
+    {
+        no strict 'refs';
+        push @{"$package\::ISA"}, "$class\::Base";
+    }
 
     install_sub($package => with   => \&with);
     install_sub($package => has    => \&has);

@@ -10,7 +10,7 @@ use mro     ();
 use feature ();
 
 sub import {
-    my $class = shift;
+    my $class   = shift;
     my $package = caller;
 
     # From Modern::Perl
@@ -32,6 +32,11 @@ sub extends {
     Boose::Loader::load($class);
 
     no strict 'refs';
+
+    if (@{"$package\::ISA"}) {
+        pop @{"$package\::ISA"};
+    }
+
     push @{"$package\::ISA"}, $class;
 }
 

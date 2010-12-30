@@ -1,8 +1,6 @@
 package ClassWithException;
 use Boose;
 
-extends 'Boose::Base';
-
 use Exception;
 
 sub mortal {

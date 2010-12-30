@@ -1,8 +1,6 @@
 package ClassWithMethodModifiers;
 use Boose;
 
-extends 'Boose::Base';
-
 sub method {
     my $self = shift;
 
