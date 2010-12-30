@@ -8,7 +8,9 @@ use base 'Exporter';
 use vars qw(@EXPORT @EXPORT_OK $VERSION @ISA);
 
 @EXPORT = @EXPORT_OK =
-  qw(is_class_loaded class_to_path install_sub install_alias modify_sub);
+  qw(is_class_loaded class_to_path install_sub install_alias modify_sub clone);
+
+use Scalar::Util 'blessed';
 
 sub is_class_loaded {
     my $class = shift;
@@ -93,4 +95,58 @@ sub modify_sub {
     }
 }
 
+sub clone {
+    my $orig = shift;
+
+    my $dest;
+
+    if (blessed($orig)) {
+        die 'TODO';
+    }
+    elsif (my $ref = ref $orig) {
+        if ($ref eq 'HASH') {
+            $dest = _clone_hashref($orig);
+        }
+        elsif ($ref eq 'ARRAY') {
+            $dest = _clone_arrayref($orig);
+        }
+        elsif ($ref eq 'SCALAR') {
+            my $tmp = $$orig;
+            $dest = \$tmp;
+        }
+        elsif ($ref eq 'CODE') {
+            $dest = $orig;
+        }
+        else {
+            die 'TODO';
+        }
+    }
+    else {
+        $dest = $orig;
+    }
+
+    return $dest;
+}
+
+sub _clone_hashref {
+    my $hashref = shift;
+
+    my $dest = {};
+    while (my ($key, $value) = each %$hashref) {
+        $dest->{$key} = clone($value);
+    }
+
+    return $dest;
+}
+
+sub _clone_arrayref {
+    my $arrayref = shift;
+
+    my $dest = [];
+    foreach (@$arrayref) {
+        push @$dest, clone($_);
+    }
+
+    return $dest;
+}
 1;

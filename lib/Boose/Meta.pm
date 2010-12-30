@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 require Carp;
+use Scalar::Util 'blessed';
 
 use Boose::Meta::Attr;
 
@@ -18,7 +19,9 @@ sub new {
             if (my $parent_meta = $classes{$parent}) {
                 my $meta = __PACKAGE__->new;
 
-                $meta->{attrs} = {%{$parent_meta->attrs}};
+                foreach my $name (keys %{$parent_meta->attrs}) {
+                    $meta->add_attr($name => $parent_meta->attr($name)->clone);
+                }
 
                 $meta->set_class($for_class);
 
@@ -38,6 +41,11 @@ sub set_class { $_[0]->{class} = $_[1] }
 sub add_attr {
     my $self = shift;
     my ($name, $args) = @_;
+
+    if (blessed($args) && $args->isa('Boose::Meta::Attr')) {
+        $self->{attrs}->{$name} = $args;
+        return;
+    }
 
     $args ||= {};
     $args = {default => $args} if ref $args ne 'HASH';
