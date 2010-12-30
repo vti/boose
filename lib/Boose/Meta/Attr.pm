@@ -24,8 +24,19 @@ sub is_weak_ref { !!$_[0]->{weak_ref} }
 sub is_static   { !!$_[0]->{static} }
 
 sub set_static_value { $_[0]->{static_value} = $_[1] }
-sub static_value { $_[0]->{static_value} }
-sub is_static_value_set { !!exists $_[0]->{static_value} }
+
+sub static_value {
+    my $self = shift;
+
+    return unless $self->is_static;
+
+    return $self->{static_value} if exists $self->{static_value};
+
+    my $default = $self->default;
+    $default = $default->($self) if ref $default eq 'CODE';
+
+    return $self->{static_value} = $default;
+}
 
 sub clone {
     my $self = shift;
@@ -42,7 +53,8 @@ sub clone {
         name         => $name,
         default      => $default,
         is           => $is,
-        weak_ref     => $is_weak_ref,
+        weak_ref     => !!$is_weak_ref,
+        static       => $self->is_static,
         static_value => $static_value
     );
 }

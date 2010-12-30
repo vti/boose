@@ -75,7 +75,7 @@ sub get {
     my $attr = $self->meta->attr($name);
 
     if ($attr->is_static) {
-        return $attr->static_value if $attr->is_static_value_set;
+        return $attr->static_value;
     }
     else {
         return $self->{$name} if exists $self->{$name};
@@ -84,13 +84,7 @@ sub get {
     my $default = $attr->default;
     $default = $default->($self) if ref $default eq 'CODE';
 
-    if ($attr->is_static) {
-        $attr->set_static_value($default);
-        return $attr->static_value;
-    }
-    else {
-        return $self->{$name} = $default;
-    }
+    return $self->{$name} = $default;
 }
 
 sub set {
