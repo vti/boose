@@ -80,7 +80,6 @@ Boose is a lightweight Moose-like OO system for Perl5.
 
     package BreakableRole;
     use Boose::Role;
-    extends 'Boose::Role::Base';
 
     sub break {}
 
