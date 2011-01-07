@@ -96,6 +96,8 @@ sub set {
 
     my $attr = $self->meta->attr($name);
 
+    Carp::croak("Unknown attribute '$name'") unless defined $attr;
+
     if ($attr->is_static) {
         $attr->set_static_value($value);
     }

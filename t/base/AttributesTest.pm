@@ -70,6 +70,22 @@ sub constructor_with_unknown_attribute : Tests(1) {
     like $@ => qr/Unknown attribute/;
 }
 
+sub unknown_attribute : Test(1) {
+    my $self = shift;
+
+    my $object = $self->_build_object;
+
+    my $e;
+    try {
+        $object->set(unknown_attr => 'bar');
+    }
+    catch {
+        $e = $_;
+    };
+
+    like $e => qr/Unknown attribute 'unknown_attr'/;
+}
+
 sub attempt_to_set_ro_attribute : Test(1) {
     my $self = shift;
 
