@@ -33,11 +33,11 @@ sub extends {
 
     no strict 'refs';
 
-    if (@{"$package\::ISA"}) {
+    if ($class->isa('Boose::Base') && @{"$package\::ISA"}) {
         pop @{"$package\::ISA"};
     }
 
-    push @{"$package\::ISA"}, $class;
+    unshift @{"$package\::ISA"}, $class;
 }
 
 1;
