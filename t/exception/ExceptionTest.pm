@@ -1,4 +1,4 @@
-package IteratorTest;
+package ExceptionTest;
 
 use strict;
 use warnings;
