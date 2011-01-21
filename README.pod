@@ -5,9 +5,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
 =head2 Moose-like DSL (but not required)
 
     package Car;
-    use Boose;
-
-    extends 'Vehicle';
+    use Boose 'Vehicle';
 
     with 'BreakableRole';
 
@@ -16,9 +14,7 @@ Boose is a lightweight Moose-like OO system for Perl5.
 =head2 Constructor
 
     package Car;
-    use Boose;
-
-    extends 'Vehicle';
+    use Boose 'Vehicle';
 
     has 'number';
 
@@ -91,14 +87,12 @@ Boose is a lightweight Moose-like OO system for Perl5.
 =head2 Exception classes and try/catch/finally syntax (provided by L<Try::Tiny>)
 
     package Car::Exception;
-    use Boose;
-    extends 'Boose::Exception';
+    use Boose '::Exception';
 
     has message => 'Car is broken';
 
     package Car;
     use Boose;
-    extends 'Boose::Base';
 
     sub break {
         try {
@@ -132,6 +126,9 @@ Boose is a lightweight Moose-like OO system for Perl5.
 =head2 Moose-like syntax is not required
 
     package Car;
+
+    use strict;
+    use warnings;
 
     use base 'Boose::Base';
 
