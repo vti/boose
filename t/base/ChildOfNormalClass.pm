@@ -1,7 +1,5 @@
 package ChildOfNormalClass;
-use Boose;
-
-extends 'NormalClass';
+use Boose 'NormalClass';
 
 has 'foo';
 

@@ -3,8 +3,6 @@
 package Foo;
 use Boose;
 
-extends 'Boose::Base';
-
 has 'foo';
 
 sub mortal {

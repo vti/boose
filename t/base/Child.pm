@@ -1,7 +1,5 @@
 package Child;
-use Boose;
-
-extends 'Class';
+use Boose 'Class';
 
 has 'foofoo';
 

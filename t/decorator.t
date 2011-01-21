@@ -5,17 +5,13 @@
     package Foo;
     use Boose;
 
-    extends 'Boose::Base';
-
     sub foo {'Hello'}
 }
 
 {
 
     package Bar;
-    use Boose;
-
-    extends 'Boose::Decorator';
+    use Boose '::Decorator';
 
     sub foo { shift->get_decorated->foo . ' there' }
 }
@@ -23,8 +19,6 @@
 package main;
 
 use Test::More tests => 1;
-
-use Data::Dumper;
 
 my $bar = Bar->new(Foo->new);
 is $bar->foo => 'Hello there';
