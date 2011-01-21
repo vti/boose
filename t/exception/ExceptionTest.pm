@@ -9,6 +9,7 @@ use Test::More;
 use Try::Tiny;
 
 use Exception;
+use ClassWithExceptions;
 
 sub throw_object : Test(1) {
     try {
@@ -57,6 +58,26 @@ sub stringnification : Test(2) {
     }
     catch {
         like $_ => qr/Exception raised/;
+
+        ok(Boose::Exception->caught($_ => 'Exception'));
+    };
+}
+
+sub throw_string_from_class : Test(1) {
+    try {
+        ClassWithExceptions->throw_string;
+    }
+    catch {
+        like $_ => qr/foo/;
+    };
+}
+
+sub throw_object_from_class : Test(2) {
+    try {
+        ClassWithExceptions->throw_object;
+    }
+    catch {
+        like $_ => qr/bar/;
 
         ok(Boose::Exception->caught($_ => 'Exception'));
     };
