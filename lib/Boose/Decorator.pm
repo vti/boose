@@ -1,7 +1,6 @@
 package Boose::Decorator;
-use Boose;
 
-extends 'Boose::Base';
+use Boose;
 
 has 'decorated';
 

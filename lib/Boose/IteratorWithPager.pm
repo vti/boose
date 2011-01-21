@@ -1,7 +1,6 @@
 package Boose::IteratorWithPager;
-use Boose;
 
-extends 'Boose::Decorator';
+use Boose '::Decorator';
 
 sub next {
     my $self   = shift;
