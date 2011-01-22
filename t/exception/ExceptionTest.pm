@@ -43,10 +43,10 @@ sub exception_directly : Test(3) {
         Exception->throw(message => 'Something bad happened');
     }
     catch {
-        like $_->get_message => qr/Something bad happened/;
+        like $_->message => qr/Something bad happened/;
 
-        ok(Boose::Exception->caught($_ => 'Exception'));
-        ok !Boose::Exception->caught($_ => 'Unknown');
+        ok(Boose::Exception->caught('Exception'));
+        ok !Boose::Exception->caught('Unknown');
     };
 }
 
@@ -55,9 +55,9 @@ sub exception_with_default_message : Test(2) {
         Exception->throw;
     }
     catch {
-        like $_->get_message => qr/Exception raised/;
+        like $_->message => qr/Exception raised/;
 
-        ok(Boose::Exception->caught($_ => 'Exception'));
+        ok(Boose::Exception->caught('Exception'));
     };
 }
 
