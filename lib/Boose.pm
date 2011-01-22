@@ -26,7 +26,10 @@ sub import_finalize {
     install_sub($package => has    => \&has);
     install_sub($package => static => \&static);
 
-    install_sub($package => throw   => \&throw);
+    if (!$package->isa('Boose::Exception')) {
+        install_sub($package => throw   => \&throw);
+    }
+
     install_sub($package => try     => \&try);
     install_sub($package => catch   => \&catch);
     install_sub($package => finally => \&finally);

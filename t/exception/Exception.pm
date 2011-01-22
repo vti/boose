@@ -1,6 +1,6 @@
 package Exception;
 
-use Boose '::Exception::Base';
+use Boose '::Exception';
 
 has message => 'Exception raised';
 

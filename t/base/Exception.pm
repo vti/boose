@@ -1,4 +1,5 @@
 package Exception;
-use Boose '::Exception::Base';
+
+use Boose '::Exception';
 
 1;

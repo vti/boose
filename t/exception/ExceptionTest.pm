@@ -11,6 +11,15 @@ use Try::Tiny;
 use Exception;
 use ClassWithExceptions;
 
+sub throw_unknown : Test(1) {
+    try {
+        Boose::Exception->throw;
+    }
+    catch {
+        like $_ => qr/Unknown exception/;
+    };
+}
+
 sub throw_object : Test(1) {
     try {
         Boose::Exception->throw(Exception->new);

@@ -1,6 +1,6 @@
 package Boose::Exception::CantLoadClass;
 
-use base 'Boose::Exception::Base';
+use base 'Boose::Exception';
 
 __PACKAGE__->attr('class');
 __PACKAGE__->attr('description');

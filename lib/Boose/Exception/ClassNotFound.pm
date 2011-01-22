@@ -1,6 +1,6 @@
 package Boose::Exception::ClassNotFound;
 
-use base 'Boose::Exception::Base';
+use base 'Boose::Exception';
 
 __PACKAGE__->attr('class');
 

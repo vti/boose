@@ -4,11 +4,11 @@ use Boose;
 use Exception;
 
 sub throw_string {
-    throw 'foo';
+    throw('foo');
 }
 
 sub throw_object {
-    throw(Exception->new(message => 'bar'));
+    Exception->throw(message => 'bar');
 }
 
 1;
