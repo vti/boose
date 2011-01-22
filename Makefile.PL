@@ -39,6 +39,7 @@ WriteMakefile(
         'Carp'         => 0,
         'Exporter'     => 0,
         'Scalar::Util' => 0,
+        'Test::Class'  => 0,
         'Test::More'   => 0,
         'Try::Tiny'    => 0,
     },
