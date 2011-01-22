@@ -3,10 +3,11 @@ package Boose::Loader;
 use strict;
 use warnings;
 
-use Boose::Exception::ClassNotFound;
-use Boose::Exception::CantLoadClass;
 use Boose::Util;
 use Try::Tiny;
+
+use Boose::Exception::ClassNotFound;
+use Boose::Exception::CantLoadClass;
 
 sub is_valid_class_name {
     my $class = shift;

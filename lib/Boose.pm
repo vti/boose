@@ -11,7 +11,7 @@ use Boose::Util qw(install_sub modify_sub);
 
 use Try::Tiny;
 
-our $VERSION = '0.0001';
+our $VERSION = '0.001001';
 
 sub import_finalize {
     my $class   = shift;
