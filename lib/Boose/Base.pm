@@ -11,7 +11,7 @@ use Boose::Util qw(install_sub install_alias);
 
 use Scalar::Util 'weaken';
 
-our @RESERVED_NAMES = (qw/new has static throw meta attr get set/);
+our @RESERVED_NAMES = (qw/new has static throw caught meta attr get set/);
 
 sub new {
     my $class = shift;
