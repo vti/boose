@@ -27,7 +27,8 @@ sub import_finalize {
     install_sub($package => static => \&static);
 
     if (!$package->isa('Boose::Exception')) {
-        install_sub($package => throw   => \&throw);
+        install_sub($package => throw  => \&throw);
+        install_sub($package => caught => \&caught);
     }
 
     install_sub($package => try     => \&try);
@@ -49,7 +50,9 @@ sub static {
         @_ == 2 ? ($_[0], default => $_[1], static => 1) : (@_, static => 1));
 }
 
-sub with  { caller->add_role(@_) }
-sub throw { Boose::Exception->throw(@_) }
+sub with { caller->add_role(@_) }
+
+sub caught { Boose::Exception->caught(@_) }
+sub throw  { Boose::Exception->throw(@_) }
 
 1;

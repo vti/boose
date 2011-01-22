@@ -20,24 +20,14 @@ sub throw {
 
     my $e;
 
-    if (@_ == 0) {
-        if (blessed($self)) {
-            $e = $self;
-        }
-        else {
-            $e = $self->new;
-        }
-    }
-    elsif (@_ == 1) {
+    if (@_ == 1) {
         $e = $_[0];
     }
+    elsif (blessed($self)) {
+        $e = $self;
+    }
     else {
-        if (blessed($self)) {
-            die 'TODO';
-        }
-        else {
-            $e = $self->new(@_);
-        }
+        $e = $self->new(@_);
     }
 
     Carp::croak($e);
@@ -46,6 +36,8 @@ sub throw {
 sub caught {
     my $self = shift;
     my ($e, $class) = @_;
+
+    ($class, $e) = ($e, $_) unless $class;
 
     return if !blessed $e;
 
