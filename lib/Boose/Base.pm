@@ -132,6 +132,18 @@ sub _install_attr {
 
     install_alias($package => $name => "get_$name");
 
+    if (my $handles = $attr->handles) {
+        $handles = [$handles] unless ref $handles eq 'ARRAY';
+
+        foreach my $handle (@$handles) {
+            install_sub(
+                $package => $handle => sub {
+                    shift->$name->$handle(@_);
+                }
+            );
+        }
+    }
+
     if ($attr->is ne 'ro') {
         install_sub(
             $package => "set_$name" => sub {

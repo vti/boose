@@ -22,6 +22,7 @@ sub default     { $_[0]->{default} }
 sub is          { $_[0]->{is} }
 sub is_weak_ref { !!$_[0]->{weak_ref} }
 sub is_static   { !!$_[0]->{static} }
+sub handles     { $_[0]->{handles} }
 
 sub set_static_value { $_[0]->{static_value} = $_[1] }
 
