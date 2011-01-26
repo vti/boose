@@ -5,7 +5,7 @@ use Delegator;
 
 has foo => {
     default => sub { Delegator->new },
-    handles => [qw/bar set_bar baz/]
+    handles => [qw/bar baz/]
 };
 
 1;

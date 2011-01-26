@@ -14,7 +14,7 @@ use Delegator;
 sub _build           { shift; ClassWithDelegators->new(@_) }
 sub _build_delegator { shift; Delegator->new(@_) }
 
-sub delegator : Test(6) {
+sub delegator : Test(7) {
     my $self = shift;
 
     my $object = $self->_build;
@@ -25,7 +25,7 @@ sub delegator : Test(6) {
     is $object->bar => 'bar';
     is $object->baz => 'baz';
 
-    $object->set_bar('hello');
+    isa_ok($object->set_bar('hello'), 'ClassWithDelegators');
     is $object->foo->bar => 'hello';
     is $object->bar      => 'hello';
 }

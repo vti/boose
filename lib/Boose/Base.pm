@@ -138,7 +138,16 @@ sub _install_attr {
         foreach my $handle (@$handles) {
             install_sub(
                 $package => $handle => sub {
-                    shift->$name->$handle(@_);
+                    shift->$name->$handle;
+                }
+            );
+
+            my $setter = "set_$handle";
+            install_sub(
+                $package => $setter => sub {
+                    my $self = shift;
+                    $self->$name->$setter(@_);
+                    return $self;
                 }
             );
         }
