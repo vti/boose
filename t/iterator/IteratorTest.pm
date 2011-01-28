@@ -25,7 +25,7 @@ sub empty : Test(6) {
     ok not defined $i->last;
 }
 
-sub size : Test(2) {
+sub size : Test(4) {
     my $self = shift;
 
     my $i = $self->_create_iterator(1, 2, 3);
@@ -33,6 +33,12 @@ sub size : Test(2) {
 
     $i = $self->_create_iterator(1, 2);
     is $i->size => 2;
+
+    $i = $self->_create_iterator(1);
+    is $i->size => 1;
+
+    $i = $self->_create_iterator([1]);
+    is $i->size => 1;
 }
 
 sub reverse : Test(8) {

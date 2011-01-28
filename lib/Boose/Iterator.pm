@@ -1,4 +1,5 @@
 package Boose::Iterator;
+
 use Boose;
 
 sub new {
@@ -14,7 +15,7 @@ sub BUILD { shift->rewind }
 sub set_elements {
     my $self = shift;
 
-    my $elements = @_ == 0 ? [] : @_ > 1 ? [@_] : $_[0];
+    my $elements = @_ == 0 ? [] : ref $_[0] eq 'ARRAY' ? $_[0] : [@_];
     $self->{elements} = $elements;
 }
 
