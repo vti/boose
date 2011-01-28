@@ -4,19 +4,11 @@ use Boose;
 
 has 'decorated';
 
-require Carp;
-
 sub new {
-    my $class     = shift;
-    my $decorated = shift;
+    my $class = shift;
+    my @args = @_ % 2 != 0 ? (decorated => shift, @_) : @_;
 
-    Carp::croak('Decorated object is required') unless defined $decorated;
-
-    my $self = $class->SUPER::new(@_);
-
-    $self->set_decorated($decorated);
-
-    return $self;
+    return $class->SUPER::new(@args);
 }
 
 our $AUTOLOAD;
