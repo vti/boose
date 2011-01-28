@@ -4,13 +4,19 @@ use Boose;
 sub new {
     my $self = shift->SUPER::new;
 
-    my $elements = @_ == 0 ? [] : @_ > 1 ? [@_] : $_[0];
-    $self->{elements} = $elements;
+    $self->set_elements(@_);
 
     return $self;
 }
 
 sub BUILD { shift->rewind }
+
+sub set_elements {
+    my $self = shift;
+
+    my $elements = @_ == 0 ? [] : @_ > 1 ? [@_] : $_[0];
+    $self->{elements} = $elements;
+}
 
 sub rewind { shift->{index} = 0 }
 
