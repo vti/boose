@@ -8,6 +8,8 @@ use base 'Boose::Base';
 use Scalar::Util 'blessed';
 require Carp;
 
+our @CARP_NOT = qw(Boose Boose::Base);
+
 use overload '""' => sub { shift->to_string }, fallback => 1;
 use overload 'bool' => sub { shift; }, fallback => 1;
 
