@@ -6,7 +6,7 @@ sub next {
     my $self   = shift;
     my $length = shift;
 
-    return $self->get_decorated->next unless $length;
+    return $self->decorated->next unless $length;
 
     my @elements;
     foreach (1 .. $length) {
@@ -16,14 +16,14 @@ sub next {
         push @elements, $element;
     }
 
-    return $self->new($self->get_decorated->new(@elements));
+    return $self->new($self->decorated->new(@elements));
 }
 
 sub prev {
     my $self   = shift;
     my $length = shift;
 
-    return $self->get_decorated->prev unless $length;
+    return $self->decorated->prev unless $length;
 
     $self->prev;
 
@@ -35,7 +35,7 @@ sub prev {
         push @elements, $element;
     }
 
-    return $self->new($self->get_decorated->new(@elements));
+    return $self->new($self->decorated->new(@elements));
 }
 
 1;
