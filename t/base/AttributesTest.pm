@@ -86,20 +86,24 @@ sub unknown_attribute : Test(1) {
     like $e => qr/Unknown attribute 'unknown_attr'/;
 }
 
-sub attempt_to_set_ro_attribute : Test(1) {
+sub attempt_to_set_ro_attribute : Test(2) {
     my $self = shift;
+
+    my $e;
+    try { $self->_build_object(read_only => 2) } catch { $e = $_; };
+    like $e => qr/Attribute 'read_only' is read only/;
 
     my $object = $self->_build_object;
 
-    local $@;
-    eval { $object->set_read_only(1); };
-    like $@ => qr/Attribute 'read_only' is read only/;
+    try { $object->set_read_only(1); } catch { $e = $_ };
+    like $e => qr/Attribute 'read_only' is read only/;
 }
 
-sub overwritable_mutator : Test(1) {
+sub overwritable_mutator : Test(2) {
     my $self = shift;
 
-    my $object = $self->_build_object;
+    my $object = $self->_build_object(overwritable => '123');
+    is $object->overwritable => 'one23';
 
     $object->set_overwritable('123');
     is $object->overwritable => 'one23';

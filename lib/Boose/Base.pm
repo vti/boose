@@ -17,18 +17,33 @@ sub new {
     my $class = shift;
     $class = ref $class if ref $class;
 
-    my $self = {@_};
+    my $self = {};
     bless $self, $class;
 
-    foreach my $key (keys %$self) {
+    my $args = $self->BUILDARGS(@_);
+
+    while (my ($key, $value) = each %$args) {
         Carp::croak(
             "Unknown attribute '$key' passed to the 'new' contructor of '$class'"
         ) unless $self->meta->attr_exists($key);
+
+        my $setter = "set_$key";
+        $self->$setter($value);
     }
 
     $self->BUILD if $self->can('BUILD');
 
     return $self;
+}
+
+sub BUILDARGS {
+    my $self = shift;
+
+    if (@_ == 0 && ref $_[0] eq 'HASH') {
+        return $_[0];
+    }
+
+    return {@_};
 }
 
 sub DESTROY { }
@@ -51,7 +66,8 @@ sub attr {
 
     my @args = @_;
     foreach my $name (@$names) {
-        Carp::croak(qq/'$name' is a reserved name/) if grep {$name eq $_} @RESERVED_NAMES;
+        Carp::croak(qq/'$name' is a reserved name/)
+          if grep { $name eq $_ } @RESERVED_NAMES;
         _install_attr($package, $name, @args);
     }
 }
