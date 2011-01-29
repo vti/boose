@@ -8,7 +8,7 @@ use base 'Exporter';
 use vars qw(@EXPORT @EXPORT_OK $VERSION @ISA);
 
 @EXPORT = @EXPORT_OK =
-  qw(is_class_loaded class_to_path install_sub install_alias modify_sub clone);
+  qw(is_class_loaded class_to_path sub_exists install_sub install_alias modify_sub clone);
 
 use Scalar::Util 'blessed';
 
@@ -27,6 +27,14 @@ sub class_to_path {
     $class .= '.pm';
 
     return $class;
+}
+
+sub sub_exists {
+    my $package = shift;
+    my $name = shift;
+
+    no strict 'refs';
+    return exists ${"$package\::"}{$name};
 }
 
 sub install_alias {

@@ -96,12 +96,13 @@ sub attempt_to_set_ro_attribute : Test(1) {
     like $@ => qr/Attribute 'read_only' is read only/;
 }
 
-sub overwritable_accessor : Test(1) {
+sub overwritable_mutator : Test(1) {
     my $self = shift;
 
     my $object = $self->_build_object;
 
-    is $object->overwritable => '123';
+    $object->set_overwritable('123');
+    is $object->overwritable => 'one23';
 }
 
 sub empty_with_defaults : Test(5) {

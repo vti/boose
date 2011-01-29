@@ -7,7 +7,7 @@ require Carp;
 
 use Boose::Meta;
 use Boose::Loader;
-use Boose::Util qw(install_sub install_alias);
+use Boose::Util qw(sub_exists install_sub install_alias);
 
 use Scalar::Util 'weaken';
 
@@ -120,7 +120,6 @@ sub _install_attr {
     my $name    = shift;
 
     my $attr = $package->meta->add_attr($name, @_);
-    return if not defined $attr->is;
 
     install_sub(
         $package => "get_$name" => sub {
@@ -154,11 +153,13 @@ sub _install_attr {
     }
 
     if ($attr->is ne 'ro') {
-        install_sub(
-            $package => "set_$name" => sub {
-                shift->set($name => @_);
-            }
-        );
+        if (!sub_exists($package, "set_$name")) {
+            install_sub(
+                $package => "set_$name" => sub {
+                    shift->set($name => @_);
+                }
+            );
+        }
     }
     else {
         install_sub(
