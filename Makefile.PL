@@ -37,6 +37,7 @@ WriteMakefile(
 
     PREREQ_PM => {
         'Carp'         => 0,
+        'Class::Load'  => 0,
         'Exporter'     => 0,
         'Scalar::Util' => 0,
         'Test::Class'  => 0,

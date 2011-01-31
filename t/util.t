@@ -3,11 +3,9 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 9;
 
 use Boose::Util;
-
-is class_to_path('Foo::Bar::Baz') => 'Foo/Bar/Baz.pm';
 
 is clone(1)     => 1;
 is clone("foo") => "foo";

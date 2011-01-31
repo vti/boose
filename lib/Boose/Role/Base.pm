@@ -31,11 +31,11 @@ sub import_methods {
         next if $method =~ m/\A_/;
         next if $method =~ m/\A[A-Z]/;
         next if grep { $_ eq $method } (
-                  qw/
-                    version import isa
-                    extends install_sub
-                    check_required_methods import_methods require_methods
-                    /
+            qw/
+              version import isa
+              extends install_sub
+              check_required_methods import_methods require_methods
+              /
         );
 
         install_sub($package => $method => \&{"$class\::$method"});
@@ -45,12 +45,14 @@ sub import_methods {
 sub require_methods {
     my $class = shift;
 
+    no strict;
+
     if (@_) {
-        $class::REQUIRES = [@_];
+        *{"$class\::REQUIRES"} = [];
         return;
     }
 
-    return @{$class::REQUIRES};
+    return @{*{"$class\::REQUIRES"} || []};
 }
 
 1;
