@@ -39,8 +39,10 @@ sub new {
 sub BUILDARGS {
     my $self = shift;
 
-    if (@_ == 0 && ref $_[0] eq 'HASH') {
-        return $_[0];
+    if (@_ == 1) {
+        return $_[0] if ref $_[0] eq 'HASH';
+
+        Carp::croak("Args passed to ->new must be an array or a hash reference");
     }
 
     return {@_};

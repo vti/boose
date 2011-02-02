@@ -62,6 +62,20 @@ sub attempt_setting_value_via_getter : Test(2) {
     like $e => qr/To change 'foo' value, use 'set_foo' instead/;
 }
 
+sub constructor : Test(3) {
+    my $self = shift;
+
+    my $object = $self->_build_object(foo => 'bar');
+    is $object->foo => 'bar';
+
+    $object = $self->_build_object({foo => 'bar'});
+    is $object->foo => 'bar';
+
+    my $e;
+    try { $self->_build_object([foo => 'bar']) } catch { $e = $_ };
+    like $e => qr/must be an array or a hash reference/;
+}
+
 sub constructor_with_unknown_attribute : Tests(1) {
     my $self = shift;
 
